@@ -1,13 +1,25 @@
 import React from 'react'
 
-type TextProps = {
+type TextOwnProps<E extends React.ElementType> = {
     size?: 'sm' | 'md' | 'lg'
     color?: 'primary' | 'secondary'
-    children: React.ReactNode
+    children: React.ReactNode;
+    as?: E
 }
 
-export const Text = ({ size, color, children }: TextProps) => {
+type TextProps<E extends React.ElementType> = TextOwnProps<E> &
+    Omit<React.ComponentProps<E>, keyof TextOwnProps<E>>
+
+export const Text = <E extends React.ElementType = 'div'>({
+    size,
+    color,
+    children,
+    as
+}: TextProps<E>) => {
+    const Component = as || 'div'
     return (
-        <div className={`class-width-${size}-${color}`}>{children}</div>
+        <Component className={`class-width-${size}-${color}`}>
+            {children}
+        </Component>
     )
 }
